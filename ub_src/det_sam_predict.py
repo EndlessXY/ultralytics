@@ -6,10 +6,6 @@ import cv2
 import numpy as np
 
 
-# Load a model
-det_model = YOLO("./model/shl_best.pt")
-sam_model = SAM("./model/sam2.1_b.pt")
-
 def load_models(det_model_path="./model/shl_best.pt", sam_model_path="./model/sam2.1_b.pt"):
     """
     加载YOLO检测模型和SAM模型
@@ -62,7 +58,7 @@ def detect_mask(sam_model, img, bboxes_list):
     sam_results = sam_model(img, bboxes=bboxes_list, verbose=False)
     masks = sam_results[0].masks
     # 检查是否有mask产生
-    if masks.data.shape[0] == 0:
+    if masks is None or masks.data.shape[0] == 0:
         print("No mask found.")
         return None
     return masks
